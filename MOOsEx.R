@@ -35,7 +35,7 @@ source_https <- function(url, ...) {
 }
 
 source_https("https://github.com/lodeguns/NetBasAdj/raw/master/NetBasAdj.R",
-             "https://raw.githubusercontent.com/lodeguns/MOOs/master/MOOsFun.R")
+             "https://raw.githubusercontent.com/lodeguns/MOOs-An/master/MOOsFun.R")
 
 
 osc.eco.poly.ms.and <- osc.eco.poly.ms
