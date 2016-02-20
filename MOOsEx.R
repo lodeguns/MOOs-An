@@ -107,3 +107,42 @@ kegg.code      <- "eco00010"
 osc.print.clusters(val1, treatlabtarget, "CAIPAtoCAIPA1")
 osc.print.clusters(val2, treatlabtarget, "CAIPAtoCAIPA3")
 osc.print.clusters(val3, treatlabtarget, "CAIPAtoCAIPA7")
+
+
+
+#################################################################
+# Paper's Figures 5 (a) and (b)
+#
+# Between the generated files see:
+#
+# (a) CAIPAtoCAIPA2 normal indeg.png
+# (b) CAIPAtoCAIPA2 operons compression max outdegT.png
+#################################################################
+path.index <- 1
+
+
+osc.path.list       <-  osc.paths.list.caipa.operons[path.index]
+osc.eco.mat         <-  osc.eco.operon.ms[[path.index]]
+osc.w.out           <-  osc.list.w.out[path.index]
+osc.w.in            <-  osc.list.w.in[path.index]
+treat.path          <-  osc.paths.list.suzukietall[path.index]
+omic.val            <- "CAIPA"
+h                   <- 2
+n.seq               <- 7
+
+
+tryCatch( seq.osc.caipa.caipa.st <- osc.pst.pred.diss(osc.path.list, 
+                                                      osc.eco.mat, osc.w.in, osc.w.out, treat.path,
+                                                      omic.val, h, n.seq, TRUE, FALSE),
+          error = function(e) {
+            print("ma porc#!@...")
+            return(NULL)})
+
+osc.print.clusters(seq.osc.caipa.caipa.st, treatlabtarget, "CAIPAtoCAIPAst27")
+
+
+
+
+
+
+
