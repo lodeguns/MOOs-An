@@ -111,36 +111,108 @@ osc.print.clusters(val3, treatlabtarget, "CAIPAtoCAIPA7")
 
 
 #################################################################
-# Paper's Figures 5 (a) and (b)
+# Paper's Figures 5 (a) and (b) - Multi Omic Oscillations
 #
-# Between the generated files see:
-#
-# (a) CAIPAtoCAIPA2 normal indeg.png
-# (b) CAIPAtoCAIPA2 operons compression max outdegT.png
 #################################################################
 path.index <- 1
 
-
 osc.path.list       <-  osc.paths.list.caipa.operons[path.index]
+osc.path.list[[1]]  <-osc.path.list[[1]][osc.path.list[[1]][3] != "kmeans",]
+osc.path.list[[1]]  <-osc.path.list[[1]][osc.path.list[[1]][3] != "hclust",]
+
 osc.eco.mat         <-  osc.eco.operon.ms[[path.index]]
 osc.w.out           <-  osc.list.w.out[path.index]
 osc.w.in            <-  osc.list.w.in[path.index]
 treat.path          <-  osc.paths.list.suzukietall[path.index]
 omic.val            <- "CAIPA"
 h                   <- 2
-n.seq               <- 7
+n.seq               <- 2
 
 
-tryCatch( seq.osc.caipa.caipa.st <- osc.pst.pred.diss(osc.path.list, 
+tryCatch( seq.osc.caipa.caipa.st2 <- osc.pst.pred.diss(osc.path.list, 
                                                       osc.eco.mat, osc.w.in, osc.w.out, treat.path,
                                                       omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
             print("ma porc#!@...")
             return(NULL)})
 
-osc.print.clusters(seq.osc.caipa.caipa.st, treatlabtarget, "CAIPAtoCAIPAst27")
+##################################################################
+# Between the generated files see:
+# (a) CAIPAtoCAIPA22 normal indeg.png
+# (b) CAIPAtoCAIPA22 operons compression max outdeg.png
+#################################################################
+osc.print.clusters(seq.osc.caipa.caipa.st2, treatlabtarget, "CAIPAtoCAIPA22")
+
+#################################################################
+
+#################################################################
+# Paper's Figures 5 (c) Single omic oscillations
+#################################################################
+path.index <- 1
+
+osc.path.list       <-  osc.paths.list.cai.operons[path.index]
+osc.path.list[[1]]  <-osc.path.list[[1]][osc.path.list[[1]][3] != "kmeans",]
+osc.path.list[[1]]  <-osc.path.list[[1]][osc.path.list[[1]][3] != "hclust",]
+
+osc.eco.mat         <-  osc.eco.operon.ms[[path.index]]
+osc.w.out           <-  osc.list.w.out[path.index]
+osc.w.in            <-  osc.list.w.in[path.index]
+treat.path          <-  osc.paths.list.suzukietall[path.index]
+omic.val            <- "PA"
+h                   <- 2
+n.seq               <- 2
 
 
+tryCatch( seq.osc.cai.pa.st2 <- osc.pst.pred.diss(osc.path.list, 
+                                                       osc.eco.mat, osc.w.in, osc.w.out, treat.path,
+                                                       omic.val, h, n.seq, TRUE, FALSE),
+          error = function(e) {
+            print("ma porc#!@...")
+            return(NULL)})
+            
+##################################################################
+# Between the generated files see:
+# (c) CAItoPA22 operons compression min outdeg.png
+#################################################################
+osc.print.clusters(seq.osc.cai.pa.st2, treatlabtarget, "CAItoPAst22")
+#################################################################
+
+#################################################################
+# Paper's Figures 5 (d) Single omic oscillations
+#################################################################
+
+
+path.index <- 1
+
+osc.path.list       <- osc.paths.list.pa.operons[path.index]
+osc.path.list[[1]]  <- osc.path.list[[1]][osc.path.list[[1]][3] != "kmeans",]
+osc.path.list[[1]]  <- osc.path.list[[1]][osc.path.list[[1]][3] != "hclust",]
+
+osc.eco.mat         <-  osc.eco.operon.ms[[path.index]]
+osc.w.out           <-  osc.list.w.out[path.index]
+osc.w.in            <-  osc.list.w.in[path.index]
+treat.path          <-  osc.paths.list.suzukietall[path.index]
+omic.val            <- "PA"
+h                   <- 2
+n.seq               <- 7
+
+
+tryCatch( seq.osc.pa.pa.st7 <- osc.pst.pred.diss(osc.path.list, 
+                                                  osc.eco.mat, osc.w.in, osc.w.out, treat.path,
+                                                  omic.val, h, n.seq, TRUE, FALSE),
+          error = function(e) {
+            print("ma porc#!@...")
+            return(NULL)})
+
+
+
+            
+##################################################################
+# Between the generated files see:
+# (d) PAtoPA27 operons compression min outdeg.png
+#################################################################
+osc.print.clusters(seq.osc.pa.pa.st7, treatlabtarget, "PAtoPAst27")
+#################################################################
 
 
 
