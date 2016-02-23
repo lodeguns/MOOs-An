@@ -133,7 +133,7 @@ tryCatch( seq.osc.caipa.caipa.st2 <- osc.pst.pred.diss(osc.path.list,
                                                       osc.eco.mat, osc.w.in, osc.w.out, treat.path,
                                                       omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
-            print("ma porc#!@...")
+            print("No way...")
             return(NULL)})
 
 ##################################################################
@@ -167,7 +167,7 @@ tryCatch( seq.osc.cai.pa.st2 <- osc.pst.pred.diss(osc.path.list,
                                                        osc.eco.mat, osc.w.in, osc.w.out, treat.path,
                                                        omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
-            print("ma porc#!@...")
+            print("No way...")
             return(NULL)})
             
 ##################################################################
@@ -201,7 +201,7 @@ tryCatch( seq.osc.pa.pa.st7 <- osc.pst.pred.diss(osc.path.list,
                                                   osc.eco.mat, osc.w.in, osc.w.out, treat.path,
                                                   omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
-            print("ma porc#!@...")
+            print("No way...")
             return(NULL)})
 
 
