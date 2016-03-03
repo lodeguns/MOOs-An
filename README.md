@@ -1,32 +1,29 @@
 # MOOs-An
 ##**Multi Omic Oscillations Patterns Analyses **
 
-The procedure requires to download all the files and run the script 
-**MOOsEX.R** while all functions are gathered in MOOsFun.R
+The procedure requires to download all the files and run the script **MOOsEX.R**, all functions are gathered in **MOOsFun.R**
 
-All the data descripted, in R format, are provided for the organism
-Escherichia coli K-12 MG1655, KEGG id: "eco" and the pathways considered
-in order as are listed in the supplementary material.
+The data descripted are presented in lists saved in R data format, also all the pathways and metabolic networks considered. 
 
-These data are calculated with the algorithm NBA and
-are related to the indegree and outdegree weights of the
-metabolic networks considered.
+All the data are disposed **in order** as are listed in the supplementary material and are referred to the organism **Escherichia coli K-12 MG1655**, KEGG identifier: "eco". 
+
+These data are calculated with the algorithm NBA and are related to the interactome's weights of the metabolic networks.
 
 > osc.list.w.in.Rdata
 
 > osc.list.w.out.Rdata
 
-These data are the binary matrices that describes for each
-metabolic network the operons at a genetic level and protein polymer
-at the proteic level.
+These data are referred to the binary matrices that describe for each
+metabolic network the operons ( at a genetic level ) and protein polymer
+(at the proteic level).
 
 > osc.eco.poly.ms.Rdata
 
 > osc.eco.operon.ms.Rdata
 
 This is a list of metabolic networks where for each metabolic network
-is furnished the CAI, Protein Abundance, Gene Sequences, Gene Symbol,
-Protein Name, Gene Length, 5'-3' (+)  or 3'-5' (-)
+is associated the CAI, protein abundances, gene sequences, gene symbols,
+protein names, gene lengths and  the genes' 5'-3' (+)  or 3'-5' (-) .
 
 > osc.paths.list.Rdata
 
