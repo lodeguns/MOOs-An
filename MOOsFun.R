@@ -1,5 +1,5 @@
 #########################################################
-#  Multi Omic Oscillations Networks
+#  Multi Omic Oscillations
 #
 #  Analysis of Omic and Multi Omic Patterns - Functions 
 #
@@ -11,6 +11,11 @@ library(KernSmooth)
 library(PST)
 library(cluster)
 
+
+#Paragraph 2.5 - Selection of the Patterns
+#  In particular for each i-th metabolic network are selected the ones
+#  with the highest score bigger than $ median(score * P_u)$, where $P_u$
+#  is the probability that the oscillation units are different from 0. 
 osc.get.method <- function(osc.meth.table, path.name)
 {
       pp.score <- as.numeric(paste(osc.meth.table$pvalueseq)) * 
@@ -24,6 +29,7 @@ osc.get.method <- function(osc.meth.table, path.name)
   return(NULL)
 }
 
+# Coupled with the previous function.
 osc.get.rel.paths <- function( osc.paths.list.cross)
 {
   df1 <- data.frame()
@@ -33,22 +39,22 @@ osc.get.rel.paths <- function( osc.paths.list.cross)
     path.name      <-  names(osc.paths.list.cross[j])
     
     df <- osc.get.method(osc.meth.table, path.name)
-    print(df)
+    #print(df)
     if(!is.null(df))
     {
       
       df1 <- rbind(df1, df)
       
     }
-    
-    
   }
   
   return(df1)
-  
-  
-  
 }
+
+
+#  This function is of central importance, represents a sort of interface 
+#  with the specific options enumerated in the front-end example:
+#  https://github.com/lodeguns/MOOs-An/blob/master/MOOsEx.R
 
 osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, treat.path, omic.val, h, n.seq, w, nocomp)
 {  
@@ -56,7 +62,7 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
   osc.meth.table.rel  <-  data.frame(lapply(osc.meth.table.rel, as.character), stringsAsFactors=FALSE)
   osc.meth.table.rel   <- osc.meth.table.rel[which(names(treat.path)== osc.meth.table.rel$path.name),]
   
-  
+  # If it isn't selected the w_cmp option only the no-compressed patterns are considered.
   if(nocomp == TRUE)
   { 
     osc.types.list <- "normal" 
@@ -66,7 +72,8 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
   }
   
   
-  
+  # In the tables select all the columns that represent a protein abundance variation for the
+  # specific pathway.
   treats.idx          <-  grep("PF",names(treat.path[[1]]))
   
   list.in.out.types <- list()
@@ -81,6 +88,10 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
     {
       osc.treat.lab <- names(treat.path[[1]][treats.idx[j]])
       
+      # Make the training step and prediction step of the PSTs on
+      # the selected pathways of a specific metabolic network.
+      # Save a list, also considering if there is an interactome layer 
+      # (in going edges and out going edges).
       ll <- osc.pst.train.pred(treat.path, 
                                osc.treat.lab, 
                                osc.eco.mat, 
@@ -125,6 +136,14 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
   
 }
 
+
+
+# Make a PST's prediction step and training step.
+# In the same function, (absolutely not optimized), is done the quantisation
+# of the patterns, the compression, the training of the PST, the prediction
+# of the PST and the weighting with the two types of weights described in
+# the paper. Some functions are coupled with the first repository of functions:
+# https://github.com/lodeguns/NetBasAdj/blob/master/NetBasAdj.R
 osc.pst.train.pred <- function(treat.path, 
                                osc.treat.lab,
                                osc.eco.mat, 
@@ -139,13 +158,13 @@ osc.pst.train.pred <- function(treat.path,
   
     omic.pa.st  <- as.numeric(treat.path[[1]]$PA)
     omic.cai.st <- as.numeric(treat.path[[1]]$CAI)
-  
+    # Single Omic  Protein Abundance Selection
     if(omic.val == "PA")
     {
       pf.j <- scale(as.numeric(treat.path[[1]][[osc.treat.lab]]))
     } else
     {
-    
+    # Multi Omic  Protein Abundance and CAI Selection
       pf.j <- scale(as.numeric(treat.path[[1]][[osc.treat.lab]]))
       pf.cai <- scale(omic.cai.st)
     
@@ -153,19 +172,21 @@ osc.pst.train.pred <- function(treat.path,
     
     }
   
-    nc <- NC(pf.j)                               #nc treatment
-    n.q.lev          <- osc.sel.meth.tab$n.quant #nc standard conditions
+    nc <- NC(pf.j)                               #Number of Classes (Quantisation Levels) treatment
+    n.q.lev          <- osc.sel.meth.tab$n.quant # standard conditions
     names(n.q.lev)   <- osc.sel.meth.tab$m.quant
   
     tab.bind <- data.frame()
-  
-  for(j in 1:length(nc))
-  {
-    if(length(which(nc[[j]] == unique(as.numeric(n.q.lev)))) != 0)
+    
+    # Select the number of quantisation levels in common between the patterns
+    # in standard conditions and after a treatment.
+    for(j in 1:length(nc))
     {
-      tab.bind <- rbind(tab.bind, osc.sel.meth.tab[which(nc[[j]] == as.numeric(n.q.lev)),])
-    }
-  }
+       if(length(which(nc[[j]] == unique(as.numeric(n.q.lev)))) != 0)
+       {
+          tab.bind <- rbind(tab.bind, osc.sel.meth.tab[which(nc[[j]] == as.numeric(n.q.lev)),])
+       }
+     }
   
   
   osc.sel.meth.tab <- tab.bind
@@ -261,13 +282,14 @@ osc.pst.train.pred <- function(treat.path,
       
     }
     
-    
-    print(df)
-    
-    
+    #  Remember that if on one hand the predictions on the PSTs are done on
+    #  not compressed patterns, on the other hand the PSTs could be trained 
+    #  also by compressed patterns. Obviously is a project choise and for this
+    #  reason there are some parts of the source commented.
+
     osc.pst.pred.out <- data.frame()
-    print("df$seq.std:")
-    print(df$seq.std)
+    #print("df$seq.std:")
+    #print(df$seq.std)
     
     for(j in 1:length(df$seq.std))
     {
@@ -285,8 +307,8 @@ osc.pst.train.pred <- function(treat.path,
       #                  pred.comp.min <- PSTpred(seq.to.pst[c(1:n.seq)], df$min.comp[[j]],    h, q.treat.cc.out,  seq.w.to.pst[c(1:n.seq)])
       #                  pred.comp.med <- PSTpred(seq.to.pst[c(1:n.seq)], df$med.comp[[j]],    h, q.treat.cc.out,  seq.w.to.pst[c(1:n.seq)])
       
-      print("pred standard")
-      print(pred.standard)
+      #print("pred standard")
+      #print(pred.standard)
       
       
       pred.standard.dash <- paste(pred.standard, collapse = "z")
@@ -331,8 +353,8 @@ osc.pst.train.pred <- function(treat.path,
         #                pred.comp.min <- PSTpred(seq.to.pst[c(1:n.seq)], df$min.comp[[j]],    h, q.treat.cc.in,  seq.w.to.pst[c(1:n.seq)])
         #                pred.comp.med <- PSTpred(seq.to.pst[c(1:n.seq)], df$med.comp[[j]],    h, q.treat.cc.in,  seq.w.to.pst[c(1:n.seq)])
         
-        print("pred standard")
-        print(pred.standard)              
+        #print("pred standard")
+        #print(pred.standard)              
         
         
         pred.standard.dash <- paste(pred.standard, collapse = "z")
@@ -359,8 +381,8 @@ osc.pst.train.pred <- function(treat.path,
     
     if(w==FALSE)
     {
-      print("osc.pst.pred.out:")
-      print(osc.pst.pred.out)
+      #print("osc.pst.pred.out:")
+      #print(osc.pst.pred.out)
       return(list(osc.pst.pred = osc.pst.pred.out))
     }
     return(list(osc.pst.pred.out = osc.pst.pred.out, osc.pst.pred.in = osc.pst.pred.in))}
@@ -371,6 +393,10 @@ osc.pst.train.pred <- function(treat.path,
   
 }
 
+
+
+# Number of quantisation levels for
+# a specific quantised pattern.
 
 NC <- function(x) {
   require(KernSmooth)
@@ -385,6 +411,10 @@ NC <- function(x) {
   ) 
   
 }
+
+
+# 3 functions for the different patterns compressions.
+# is an utility function
 
 comp.group <- function(data, output, group)
 { 
@@ -420,11 +450,7 @@ comp.group <- function(data, output, group)
   return(group)
 }
 
-
-
-
-
-
+# is an utility function
 comp.opt <- function(data)
 {
   output <- integer(length(data))
@@ -435,6 +461,17 @@ comp.opt <- function(data)
   }
   return(output)
 }
+
+# Paragraph 2.3 and 2-7 Quantisation levels compression
+# takes in input a quantised omic pattern or a pattern of interactome weights, and basically 
+# returns a different type of compression relative to a specific code (0,1,2,3,4) selection:
+# 0 - Operons or Operons AND Protein Polymer compression max.
+# 1 - Operons or Operons AND Protein Polymer compression min.
+# 2 - Operons or Operons AND Protein Polymer compression med.
+# 3 -If is given a pattern of interactome weights, with respect the omic pattern, 
+#    is done the compression at the average value, in the case of adjacent omic 
+#    values on the pattern equal.
+# 4 - Standard Compression.
 
 QT <- function(ccat,ccat1,n)
 {
@@ -544,6 +581,7 @@ QT <- function(ccat,ccat1,n)
   
 }
 
+#Utility Method fot the compression
 SeqId<-function(nc,ccat)
 {
   if(ccat[1]>= nc/2){
@@ -561,8 +599,9 @@ SeqId<-function(nc,ccat)
 
 
 
-# This function returns '1 - likelihood'
 
+# Probabilistic suffic trees for the prediction. Paragraph 2.6
+# This function returns '1 - likelihood'
 PSTpred<-function(seq.std, seq.treat, h, seq.w=NULL, seq.w.c=NULL, A=1){
 
     require(PST)
@@ -635,39 +674,6 @@ PSTpred<-function(seq.std, seq.treat, h, seq.w=NULL, seq.w.c=NULL, A=1){
   
 }
 
-
-
-osc.get.diss.mat <- function(seq.osc.l)
-{
-  df <- data.frame()
-  osc.t <- c(0)
-  
-  for(j in 1:length(seq.osc.l))
-  {
-    if(!is.null(seq.osc.l[[j]]$pred.standard[1])){
-      if( seq.osc.l[[j]]$l.s[1] !=0){
-        osc.t <- osc.pst.split.likeh(seq.osc.l[[j]]$pred.standard[1])}}
-    
-    for(i in 2:length(seq.osc.l[[j]]$pred.standard))
-    {
-      if(!is.null(seq.osc.l[[j]]$pred.standard[i]) ){
-        if(seq.osc.l[[j]]$l.s[1]!=0){
-          osc.t <- osc.t + osc.pst.split.likeh(seq.osc.l[[j]]$pred.standard[i])}}
-    }
-    
-    if(length(osc.t)!=1){
-      osc.t <- osc.t /length(seq.osc.l[[j]]$pred.standard)
-      #print(df)
-      df <- rbind(df, osc.t)
-      names(df) <- c(1:length(osc.t))
-    }
-    
-    
-  }
-  return(df)  
-  
-}
-
 osc.pst.split.likeh <- function(str)
 {
   str    <- paste(str)
@@ -677,6 +683,7 @@ osc.pst.split.likeh <- function(str)
   
 }
 
+#  2 functions for the study of the hierarchical clusters and printing.
 
 osc.get.diss.mat <- function(seq.osc.l)
 {
