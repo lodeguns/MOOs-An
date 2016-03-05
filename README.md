@@ -1,5 +1,5 @@
 # MOOs-An
-##**Multi Omic Oscillations Patterns Analyses **
+##**Multi Omic Oscillations Patterns**
 
 The procedure requires to download all the files and run the script **MOOsEX.R**, all functions are gathered in **MOOsFun.R**
 
@@ -14,7 +14,7 @@ These data are calculated with the algorithm NBA and are related to the interact
 > osc.list.w.out.Rdata
 
 These data are referred to the binary matrices that describe for each
-metabolic network the operons ( at a genetic level ) and protein polymer
+metabolic network the operons ( at a genetic level ) and protein complexes (poly)
 (at the proteic level).
 
 > osc.eco.poly.ms.Rdata
@@ -29,7 +29,7 @@ protein names, gene lengths and  the genes' 5'-3' (+)  or 3'-5' (-) .
 
 For each pathway considered are present all the possible SOPs and MOPs.
 
-Operons AND Protein Polymers Compressions
+Operons AND protein complexes compressions
 > osc.paths.list.cai.poly.Rdata      #SOPs of CAI
 
 > osc.paths.list.pa.poly.Rdata       #SOPs of Protein Abundance
