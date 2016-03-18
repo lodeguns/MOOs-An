@@ -27,7 +27,8 @@ protein names, gene lengths and  the genes' 5'-3' (+)  or 3'-5' (-) .
 
 > osc.paths.list.Rdata
 
-For each pathway considered are present all the possible SOPs and MOPs.
+For each pathway considered are present all the possible SOPs and MOPs 
+discretised.
 
 Operons AND protein complexes compressions
 > osc.paths.list.cai.poly.Rdata      #SOPs of CAI
