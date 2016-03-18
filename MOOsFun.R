@@ -1,7 +1,8 @@
 #########################################################
-#  Multi Omic Oscillations
+#  Multi Omic Oscillations - - - Functions 
 #
-#  Analysis of Omic and Multi Omic Patterns - Functions 
+#  Novel algorithms to detect oscillatory 
+#  patterns in multi omic metabolic networks. 
 #
 #  Francesco Bardozzo, Pietro Liò, Roberto Tagliaferri
 #
@@ -139,7 +140,7 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
 
 
 # Make a PST's prediction step and training step.
-# In the same function, (absolutely not optimized), is done the quantisation
+# In the same function, (absolutely not optimized), is done the discretisation
 # of the patterns, the compression, the training of the PST, the prediction
 # of the PST and the weighting with the two types of weights described in
 # the paper. Some functions are coupled with the first repository of functions:
@@ -172,13 +173,13 @@ osc.pst.train.pred <- function(treat.path,
     
     }
   
-    nc <- NC(pf.j)                               #Number of Classes (Quantisation Levels) treatment
+    nc <- NC(pf.j)                               #Number of Classes (Discretisation Levels) treatment
     n.q.lev          <- osc.sel.meth.tab$n.quant # standard conditions
     names(n.q.lev)   <- osc.sel.meth.tab$m.quant
   
     tab.bind <- data.frame()
     
-    # Select the number of quantisation levels in common between the patterns
+    # Select the number of discretisation levels in common between the patterns
     # in standard conditions and after a treatment.
     for(j in 1:length(nc))
     {
@@ -395,8 +396,8 @@ osc.pst.train.pred <- function(treat.path,
 
 
 
-# Number of quantisation levels for
-# a specific quantised pattern.
+# Number of discretisation levels for
+# a specific discretised pattern.
 
 NC <- function(x) {
   require(KernSmooth)
@@ -462,8 +463,8 @@ comp.opt <- function(data)
   return(output)
 }
 
-# Paragraph 2.3 and 2-7 Quantisation levels compression
-# takes in input a quantised omic pattern or a pattern of interactome weights, and basically 
+# Paragraph 2.3 and 2.7
+# takes in input a discretised omic pattern or a pattern of interactome weights, and basically 
 # returns a different type of compression relative to a specific code (0,1,2,3,4) selection:
 # 0 - Operons or Operons AND Protein Polymer compression max.
 # 1 - Operons or Operons AND Protein Polymer compression min.
