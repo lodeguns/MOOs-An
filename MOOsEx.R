@@ -1,7 +1,8 @@
 #########################################################
-#  Multi Omic Oscillations Networks
+#  Multi Omic Oscillations - - - An Example
 #
-#  Analysis of Omic and Multi Omic Patterns - An Example
+#  Novel algorithms to detect oscillatory patterns in 
+#  multi omic metabolic networks.
 #
 #  Francesco Bardozzo, Pietro Liò, Roberto Tagliaferri
 #
