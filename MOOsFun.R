@@ -13,7 +13,7 @@ library(PST)
 library(cluster)
 
 
-#Paragraph 2.5 - Selection of the Patterns
+#Paragraph 2.5 - Identification of the Oscillatory Best Patterns
 #  In particular for each i-th metabolic network are selected the ones
 #  with the highest score bigger than $ median(score * P_u)$, where $P_u$
 #  is the probability that the oscillation units are different from 0. 
