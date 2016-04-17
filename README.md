@@ -5,7 +5,7 @@ The procedure requires to download all the files and run the script **MOOsEX.R**
 
 The data descripted are presented in lists saved in R data format, also all the pathways and metabolic networks considered. 
 
-All the data are disposed **in order** as are listed in the supplementary material and are referred to the organism **Escherichia coli K-12 MG1655**, KEGG identifier: "eco". 
+All the data are disposed **in order** as they are listed in the supplementary material and are referred to the organism **Escherichia coli K-12 MG1655**, KEGG identifier: "eco". 
 
 These data are calculated with the algorithm NBA and are related to the interactome's weights of the metabolic networks.
 
