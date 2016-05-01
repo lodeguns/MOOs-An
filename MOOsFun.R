@@ -14,7 +14,7 @@ library(cluster)
 
 
 #Paragraph 2.5 - Identification of the Oscillatory Best Patterns
-#  In particular for each i-th metabolic network are selected the ones
+#  In particular for each i-th metabolic pathway are selected the ones
 #  with the highest score bigger than $ median(score * P_u)$, where $P_u$
 #  is the probability that the oscillation units are different from 0. 
 osc.get.method <- function(osc.meth.table, path.name)
@@ -90,7 +90,7 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
       osc.treat.lab <- names(treat.path[[1]][treats.idx[j]])
       
       # Make the training step and prediction step of the PSTs on
-      # the selected pathways of a specific metabolic network.
+      # the selected pathways of a specific metabolic pathway.
       # Save a list, also considering if there is an interactome layer 
       # (in going edges and out going edges).
       ll <- osc.pst.train.pred(treat.path, 
