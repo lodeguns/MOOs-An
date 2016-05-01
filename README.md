@@ -57,4 +57,4 @@ Built on R - 3.1.2 - 64bit - Pumpkin Helmet
 
 
 ##**Oscillatory patterns identification**
-In the folder **score of omic patterns - toy examples** are present some tests with all the possible combinations of 3,4,5 discretisation levels of patterns of length 9. As described in the paper is computer P_u (labelled prob in these files) and the oscillation score (labelled score) and is normalisation (nrm.sc).
+In the folder **score of omic patterns - toy examples** are present some tests with all the possible combinations of 3,4,5 discretisation levels of patterns of length 9. As described in the paper is computer P_u (labelled prob in these files), the oscillation score (labelled score) and is normalisation (nrm.sc).
