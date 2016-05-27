@@ -3,7 +3,7 @@
 
 The procedure requires to download all the files and run the script **MOOsEX.R**, all functions are gathered in **MOOsFun.R**
 
-The data descripted are presented in lists saved in R data format, also all the pathways and metabolic pathways considered. 
+The data are represented in lists saved in R data format, also all the considered pathways and metabolic pathways. 
 
 All the data are disposed **in order** as they are listed in the supplementary material and are referred to the organism **Escherichia coli K-12 MG1655**, KEGG identifier: "eco". 
 
