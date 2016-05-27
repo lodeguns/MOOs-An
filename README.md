@@ -14,14 +14,14 @@ These data are calculated with the algorithm NBA and are related to the interact
 > osc.list.w.out.Rdata
 
 These data are referred to the binary matrices that describe for each
-metabolic network the operons ( at a genetic level ) and protein complexes (poly)
-(at the proteic level).
+metabolic network the operons ( at a genomic level ) and protein complexes (poly)
+(at the proteomic level).
 
 > osc.eco.poly.ms.Rdata
 
 > osc.eco.operon.ms.Rdata
 
-This is a list of metabolic pathways where for each metabolic network
+This is a list of pathways where for each one
 is associated the CAI, protein abundances, gene sequences, gene symbols,
 protein names, gene lengths and  the genes' 5'-3' (+)  or 3'-5' (-) .
 
@@ -57,4 +57,4 @@ Built on R - 3.1.2 - 64bit - Pumpkin Helmet
 
 
 ##**Oscillatory patterns identification**
-In the folder **score of omic patterns - toy examples** are present some tests with all the possible combinations of 3,4,5 discretisation levels of patterns of length 9. As described in the paper is computer P_u (labelled prob in these files), the oscillation score (labelled score) and is normalisation (nrm.sc).
+In the folder **score of omic patterns - toy examples** are present some tests with all the possible combinations of 3,4,5 discretisation levels of patterns of length 9. As described in the paper is computed: P_u (labelled prob in these files), the oscillation score (labelled score) and its normalisation (nrm.sc).
