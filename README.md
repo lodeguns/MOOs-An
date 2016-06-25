@@ -62,12 +62,9 @@ In the folder **score of omic patterns - toy examples** are present some tests w
 
 # Interactome weights with Network-based Adjacency - Algorithm 1
 
-The procedure requires to download all the files and run the script **NetBasAdj-Example.R**, all functions are gathered in **NetBasAdj.R**
-
 The pseudo-code of the Algorithm 1 is described in the paper.
 
-A small example of the Algorithm 1 is linked here: https://github.com/lodeguns/NetBasAdj 
-
+A small example of the Algorithm 1 is linked here: https://github.com/lodeguns/NetBasAdj and in integrated in this source code.
 
 
 --------------------------------------------------------------------------------------------------------
