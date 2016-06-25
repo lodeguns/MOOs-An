@@ -153,9 +153,7 @@ osc.pst.train.pred <- function(treat.path,
                                osc.w.out, 
                                osc.w.in, osc.meth.table.rel, osc.types.sel, omic.val, h = 1, n.seq = 1, w = FALSE)
 {
-  #colnames(osc.w.out)[names(osc.w.out) %in% c("hm","cx")] <- c("d_NBA", "psi")
-  #colnames(osc.w.in)[names(osc.w.in) %in% c("hm","cx")] <- c("d_NBA", "psi")
-  
+
   names(osc.w.out[[1]])[grep("hm", names(osc.w.out[[1]]))] <- c("d_NBA")
   names(osc.w.out[[1]])[grep("cx", names(osc.w.out[[1]]))] <- c("psi")
   names(osc.w.in[[1]])[grep("hm", names(osc.w.in[[1]]))] <- c("d_NBA")
