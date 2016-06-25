@@ -165,6 +165,10 @@ osc.pst.train.pred <- function(treat.path,
                                              rev(as.numeric(paste(osc.sel.meth.tab$osc.score))),
                                              decreasing = FALSE), ]
   
+  #Scale                                     
+  #Controlla se ci vuole lo scale qui,
+  #non ricordo se gliel'ho dato.
+  #
   omic.pa.st  <- as.numeric(treat.path[[1]]$PA)
   omic.cai.st <- as.numeric(treat.path[[1]]$CAI)
   # Single Omic  Protein Abundance Selection
