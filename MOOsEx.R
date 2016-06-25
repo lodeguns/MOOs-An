@@ -56,28 +56,35 @@ for(j in 1:length(osc.eco.poly.ms.and))
 }
 
 
-#################################################################
+
+
+################################################################
+#  Example of clustering PST likelihoods.
+################################################################
 # Paper's Figures 5 (a) and (b) - Multi Omic Oscillations
 #
-#################################################################
+################################################################
+
 path.index <- 1
 
-osc.path.list       <-  osc.paths.list.caipa.operons[path.index]
+osc.path.list       <-  osc.paths.list.caipa.operons[path.index] # Al the possible multi omic patterns standard and operons compressed.
 osc.path.list[[1]]  <-osc.path.list[[1]][osc.path.list[[1]][3] != "kmeans",]
 osc.path.list[[1]]  <-osc.path.list[[1]][osc.path.list[[1]][3] != "hclust",]
 
-osc.eco.mat         <-  osc.eco.operon.ms[[path.index]]
-osc.w.out           <-  osc.list.w.out[path.index]
-osc.w.in            <-  osc.list.w.in[path.index]
-treat.path          <-  osc.paths.list.suzukietall[path.index]
-omic.val            <- "CAIPA"
-h                   <- 2
-n.seq               <- 2
+osc.eco.mat         <-  osc.eco.operon.ms[[path.index]]          # Adjacency Matrix of 0 and 1, if 1 occurs an operon.
+osc.w.out           <-  osc.list.w.out[path.index]               # Reactome layer weights outdegree (NBA algorithm)
+osc.w.in            <-  osc.list.w.in[path.index]                # Reactome layer weights indegree  (NBA algorithm)
+treat.path          <-  osc.paths.list.suzukietall[path.index]   # Treatments from Suzuki et All. http://www.nature.com/ncomms/2014/141217/ncomms6792/pdf/ncomms6792.pdf
+omic.val            <- "CAIPA"                                   # Codon Adaptation Index and Protein Abundance
+h                   <- 2                                         # Lenght of oscillation units = Short memory of the PSTs
+n.seq               <- 2                                         # Number of Multi Omic Patterns we have to consider with the best Osc.Score.
+w                   <- TRUE                                      # Boolean value, PST likelihoods with osc.w.out or osc.w.in?
+nocompr             <- FALSE                                     # Boolean value, do you want to consider only patterns without compression?
 
 
 tryCatch( seq.osc.caipa.caipa.st2 <- osc.pst.pred.diss(osc.path.list, 
                                                        osc.eco.mat, osc.w.in, osc.w.out, treat.path,
-                                                       omic.val, h, n.seq, TRUE, FALSE),
+                                                       omic.val, h, n.seq, w, nocompr),
           error = function(e) {
             print("No way...")
             return(NULL)})
@@ -382,15 +389,11 @@ save(correlogram.caipa.caipa.d.names,    file="correlogram.caipa.caipa.d.names.R
 
 
 
-
-
-
-
-######################################################################################################################################
-#  Example of clustering of the PSTlikelihoods.
+#Examples not in figure.
+#####################################################################################################################################
 #  In the training step is changed the number of M.O. patterns given in input in 1,3 and 7.
 #  Here we are considering only Multi Omic patterns (CAI and PA) and operons compression.
-#  Warning the whole process could take several time.
+#  Warning the whole process could take several time.  (Not present in Figures)
 ######################################################################################################################################
 
 osc.path.list       <-  osc.paths.list.caipa.operons[1] # Al the possible multi omi patterns standard and operons compressed.
@@ -450,5 +453,6 @@ kegg.code      <- "eco00010"
 osc.print.clusters(val1, treatlabtarget, "CAIPAtoCAIPA1")
 osc.print.clusters(val2, treatlabtarget, "CAIPAtoCAIPA3")
 osc.print.clusters(val3, treatlabtarget, "CAIPAtoCAIPA7")
+
 
 
