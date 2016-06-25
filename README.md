@@ -59,6 +59,17 @@ as is described in the paper.
 In the folder **score of omic patterns - toy examples** are present some tests with all the possible combinations of 3,4,5 discretisation levels of patterns of length 9. As described in the paper is computed: P_u (labelled prob in these files), the oscillation score (labelled score) and its normalisation (nrm.sc).
 
 
+
+# Interactome weights with Network-based Adjacency - Algorithm 1
+
+The procedure requires to download all the files and run the script **NetBasAdj-Example.R**, all functions are gathered in **NetBasAdj.R**
+
+The pseudo-code of the Algorithm 1 is described in the paper.
+
+A small example of the Algorithm 1 is linked here: https://github.com/lodeguns/NetBasAdj 
+
+
+
 --------------------------------------------------------------------------------------------------------
 Please note that the software and the packages linked are built on R version 3.2.5 (2016-04-14)
 > Platform: x86_64-w64-mingw32/x64 (64-bit)
