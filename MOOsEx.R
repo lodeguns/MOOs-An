@@ -61,7 +61,7 @@ for(j in 1:length(osc.eco.poly.ms.and))
 ################################################################
 #  Example of clustering PST likelihoods.
 ################################################################
-# Paper's Figures 5 (a) and (b) - Multi Omic Oscillations
+# Paper Figure 5 (a) and (b) - Multi Omic Oscillations
 #
 ################################################################
 
@@ -99,7 +99,7 @@ osc.print.clusters(seq.osc.caipa.caipa.st2, treatlabtarget, "CAIPAtoCAIPA22")
 #################################################################
 
 #################################################################
-# Paper's Figures 5 (c) Single omic oscillations
+# Paper Figures 5 (c) Single omic oscillations
 #################################################################
 path.index <- 1
 
@@ -131,7 +131,7 @@ osc.print.clusters(seq.osc.cai.pa.st2, treatlabtarget, "CAItoPAst22")
 #################################################################
 
 #################################################################
-# Paper's Figures 5 (d) Single omic oscillations
+# Paper Figure 5 (d) Single omic oscillations
 #################################################################
 
 
