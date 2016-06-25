@@ -68,6 +68,9 @@ A small example of the Algorithm 1 is linked here: https://github.com/lodeguns/N
 
 
 --------------------------------------------------------------------------------------------------------
+
+##R Session Info
+
 Please note that the software and the packages linked are built on R version 3.2.5 (2016-04-14)
 > Platform: x86_64-w64-mingw32/x64 (64-bit)
 > Running under: Windows >= 8 x64 (build 9200)
