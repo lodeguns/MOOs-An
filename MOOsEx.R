@@ -11,8 +11,12 @@
 
 library(classInt)
 library(KernSmooth)
+library(PST)
+library(cluster)
 
-#Load the NBA weights for indegree and outdegree
+
+# Load the 13 subset of data.
+
 load('./osc.list.w.in.Rdata')
 load('./osc.list.w.out.Rdata')
 load('./osc.eco.poly.ms.Rdata')
@@ -36,7 +40,10 @@ source_https <- function(url, ...) {
 }
 
 source_https("https://github.com/lodeguns/NetBasAdj/raw/master/NetBasAdj.R",
-             "https://raw.githubusercontent.com/lodeguns/MOOs-An/master/MOOsFun.R")
+             "https://github.com/lodeguns/MOOs-An/raw/master/MOOsFun.R")
+
+#If the are some erros in the automatic-download of the functions, 
+#please dowload the files manually from the two repository url above.
 
 
 osc.eco.poly.ms.and <- osc.eco.poly.ms
@@ -63,19 +70,24 @@ osc.w.out           <-  osc.list.w.out[1]               # Reactoma weights indeg
 osc.w.in            <-  osc.list.w.in[1]                # Reactoma weights indegree with Network based Adjacency Algorithm
 treat.path          <-  osc.paths.list.suzukietall[1]   #Treatments from Suzuki et All. http://www.nature.com/ncomms/2014/141217/ncomms6792/pdf/ncomms6792.pdf
 omic.val            <- "CAIPA"                          #Codon Adaptation Index and Protein Abundance
+
 h                   <- 2                                #Oscillation units - Short Memory
+
 n.seq               <- 1                                # Number of Multi Omic Patterns considered with the best Osc.Score.
 n.seq2              <- 3
 n.seq3              <- 7
 w                   <- TRUE                             # Boolean value, PST likelihoods with osc.w.out or osc.w.in?
 nocompr             <- FALSE                            # Boolean value, do you want to consider only patterns without compression?
 
-tryCatch( val1 <- osc.pst.pred.diss(osc.path.list,
-                                   osc.eco.mat,
-                                   osc.w.in, 
-                                   osc.w.out,treat.path, 
-                                   omic.val, h, n.seq,
-                                   w, nocompr) ,
+
+
+
+
+tryCatch( val1 <- osc.pst.pred.diss(osc.path.list,osc.eco.mat,
+                                    osc.w.in, 
+                                    osc.w.out,treat.path, 
+                                    omic.val, h, n.seq,
+                                    w, nocompr) ,
           error = function(e) {
             print("No way...")
             return(NULL)})
@@ -131,8 +143,8 @@ n.seq               <- 2
 
 
 tryCatch( seq.osc.caipa.caipa.st2 <- osc.pst.pred.diss(osc.path.list, 
-                                                      osc.eco.mat, osc.w.in, osc.w.out, treat.path,
-                                                      omic.val, h, n.seq, TRUE, FALSE),
+                                                       osc.eco.mat, osc.w.in, osc.w.out, treat.path,
+                                                       omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
             print("No way...")
             return(NULL)})
@@ -165,12 +177,12 @@ n.seq               <- 2
 
 
 tryCatch( seq.osc.cai.pa.st2 <- osc.pst.pred.diss(osc.path.list, 
-                                                       osc.eco.mat, osc.w.in, osc.w.out, treat.path,
-                                                       omic.val, h, n.seq, TRUE, FALSE),
+                                                  osc.eco.mat, osc.w.in, osc.w.out, treat.path,
+                                                  omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
             print("No way...")
             return(NULL)})
-            
+
 ##################################################################
 # Between the generated files see:
 # (c) CAItoPA22 operons compression min outdeg.png
@@ -199,15 +211,15 @@ n.seq               <- 7
 
 
 tryCatch( seq.osc.pa.pa.st7 <- osc.pst.pred.diss(osc.path.list, 
-                                                  osc.eco.mat, osc.w.in, osc.w.out, treat.path,
-                                                  omic.val, h, n.seq, TRUE, FALSE),
+                                                 osc.eco.mat, osc.w.in, osc.w.out, treat.path,
+                                                 omic.val, h, n.seq, TRUE, FALSE),
           error = function(e) {
             print("No way...")
             return(NULL)})
 
 
 
-            
+
 ##################################################################
 # Between the generated files see:
 # (d) PAtoPA27 operons compression min outdeg.png
@@ -220,7 +232,7 @@ osc.print.clusters(seq.osc.pa.pa.st7, treatlabtarget, "PAtoPAst27")
 ###########################################################################################################
 ##################################################################################################
 #   Figure 6 and Figure Online - Cophenetic Correlogram 
-#   Warning the computing requires several hours
+#   Warning the computing requires several hours (approximately 20h)
 #
 ################################################################################################
 
@@ -230,29 +242,29 @@ library(PST)
 library(cluster)
 
 #function
-clust.hc.diss <- function(seq.osc.caipa.pa.list, j){
-  seq.osc.l.in  <- seq.osc.caipa.pa.list[[j]][[1]]
-  seq.osc.l.out <- seq.osc.caipa.pa.list[[j]][[2]]
-  type.training <- paste(kegg.code, seq.osc.likh[[j]][[3]], sep = "  ")
-  
-  df.out   <- osc.get.diss.mat(seq.osc.l.out)
-  df.in    <- osc.get.diss.mat(seq.osc.l.in )
-  
-  diss.out <- daisy(df.out, metric = c("euclidean", "manhattan", "gower"),
-                    stand = FALSE, type = list())
-  diss.in  <- daisy(df.in, metric = c("euclidean", "manhattan", "gower"),
-                    stand = FALSE, type = list())
-  
-  hc1<-hclust(diss.out, method="complete")
-  hc2<-hclust(diss.in, method="complete")
-  return(list(hc1,hc2))
-}
+#clust.hc.diss <- function(seq.osc.caipa.pa.list, j){
+#  seq.osc.l.in  <- seq.osc.caipa.pa.list[[j]][[1]]
+#  seq.osc.l.out <- seq.osc.caipa.pa.list[[j]][[2]]
+#  type.training <- paste(kegg.code, seq.osc.likh[[j]][[3]], sep = "  ")
+#  
+#  df.out   <- osc.get.diss.mat(seq.osc.l.out)
+#  df.in    <- osc.get.diss.mat(seq.osc.l.in )
+#  
+#  diss.out <- daisy(df.out, metric = c("euclidean", "manhattan", "gower"),
+#                    stand = FALSE, type = list())
+#  diss.in  <- daisy(df.in, metric = c("euclidean", "manhattan", "gower"),
+#                    stand = FALSE, type = list())
+#  
+#  hc1<-hclust(diss.out, method="complete")
+#  hc2<-hclust(diss.in, method="complete")
+#  return(list(hc1,hc2))
+#}
 
 
 
 osc.caipa.caipa.corr <- list()
 
-for(j in 1:length(ktable.eco.sel[,1]))
+for(j in 1:length(ktable.eco.sel[,1]))   ## i.e You can try on a small set 1:3 
 { 
   
   path.index <- j
@@ -287,12 +299,12 @@ for(j in 1:length(ktable.eco.sel[,1]))
     osc.caipa.caipa.corr[length(osc.caipa.caipa.corr)+1] <- NULL
   } else {
     
-    osc.caipa.caipa.corr[length(osc.caipa.caipa.corr)+1] <- val }
-  }
+    osc.caipa.caipa.corr[length(osc.caipa.caipa.corr)+1] <- val 
+    }
+} #end for
 
 
-names(osc.caipa.caipa.corr)    <-  ktable.eco.sel$KEGGpath
-
+names(osc.caipa.caipa.corr)    <-  ktable.eco.sel$KEGGpath #small set $KEGGpath[c(1,2,3)]
 
 m.t <- osc.caipa.caipa.corr
 
@@ -301,16 +313,16 @@ str<-c()
 for(j in 1:length(m.t))
 {
   if(!is.null(m.t[j][[1]][[2]][[1]]))
-  { if(m.t[j][[1]][[2]][[1]]$l.s[1] != 0){
+  { if(m.t[j][[1]][[2]][[1]][[1]]$l.s[1] != 0){
     x<- length(clean.t)+1
     clean.t[x] <- m.t[j]
     clean.t[x][[1]][[3]] <- names(m.t[j])
     str <- c(str, names(m.t[j]))
-    } else
-    {
-      print(j)
-      print(names(m.t[j]))
-    }
+  } else
+  {
+    print(j)
+    print(names(m.t[j]))
+  }
   }
   
   
@@ -360,7 +372,7 @@ for(j in 1:length(clean.t)){
     } else
     {
       correlogram.caipa.caipa.d[j,j1] <- round(cor(cophenetic(as.dendrogram(hc1)), cophenetic(as.dendrogram(hc2))), digits= 7)
-
+      
     }
     
   }
@@ -414,7 +426,4 @@ save(correlogram.caipa.caipa.d.names,    file="correlogram.caipa.caipa.d.names.R
 
 
 ########################################################################################
-
-
-
 
