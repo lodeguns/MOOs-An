@@ -19,14 +19,14 @@ library(cluster)
 #  is the probability that the oscillation units are different from 0. 
 osc.get.method <- function(osc.meth.table, path.name)
 {
-      pp.score <- as.numeric(paste(osc.meth.table$pvalueseq)) * 
-                  as.numeric(paste(osc.meth.table$osc.score))
+  pp.score <- as.numeric(paste(osc.meth.table$pvalueseq)) * 
+    as.numeric(paste(osc.meth.table$osc.score))
   
-      df <- osc.meth.table[pp.score >= median(pp.score),]
-      if(nrow(df)!= 0)
-      {  df["path.name"]<- path.name
-         return(df)
-      }
+  df <- osc.meth.table[pp.score >= median(pp.score),]
+  if(nrow(df)!= 0)
+  {  df["path.name"]<- path.name
+  return(df)
+  }
   return(NULL)
 }
 
@@ -59,6 +59,8 @@ osc.get.rel.paths <- function( osc.paths.list.cross)
 
 osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, treat.path, omic.val, h, n.seq, w, nocomp)
 {  
+  
+  
   osc.meth.table.rel  <-  osc.get.rel.paths(osc.path.list)
   osc.meth.table.rel  <-  data.frame(lapply(osc.meth.table.rel, as.character), stringsAsFactors=FALSE)
   osc.meth.table.rel   <- osc.meth.table.rel[which(names(treat.path)== osc.meth.table.rel$path.name),]
@@ -103,7 +105,7 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
                                omic.val,
                                h,
                                n.seq, w)
-
+      
       if(is.atomic(ll))
       {
         return(ll)
@@ -123,8 +125,8 @@ osc.pst.pred.diss <- function(osc.path.list, osc.eco.mat, osc.w.in, osc.w.out, t
       {df.out<-ll$osc.pst.pred}
       
       
-      list.in[length(list.in)+1]   <- list(df.in,  osc.treat.lab)
-      list.out[length(list.out)+1] <- list(df.out, osc.treat.lab)
+      list.in[[length(list.in)+1]]  <- list(df.in,  osc.treat.lab, "in")
+      list.out[[length(list.out)+1]] <- list(df.out, osc.treat.lab, "out")
       
     }
     
@@ -151,43 +153,51 @@ osc.pst.train.pred <- function(treat.path,
                                osc.w.out, 
                                osc.w.in, osc.meth.table.rel, osc.types.sel, omic.val, h = 1, n.seq = 1, w = FALSE)
 {
+  #colnames(osc.w.out)[names(osc.w.out) %in% c("hm","cx")] <- c("d_NBA", "psi")
+  #colnames(osc.w.in)[names(osc.w.in) %in% c("hm","cx")] <- c("d_NBA", "psi")
   
-    osc.sel.meth.tab <- osc.meth.table.rel[which(osc.meth.table.rel$type == osc.types.sel ),]
-    osc.sel.meth.tab <- osc.sel.meth.tab[order(as.numeric(paste(osc.sel.meth.tab$compr)), 
-                                               rev(as.numeric(paste(osc.sel.meth.tab$osc.score))),
-                                               decreasing = FALSE), ]
+  names(osc.w.out[[1]])[grep("hm", names(osc.w.out[[1]]))] <- c("d_NBA")
+  names(osc.w.out[[1]])[grep("cx", names(osc.w.out[[1]]))] <- c("psi")
+  names(osc.w.in[[1]])[grep("hm", names(osc.w.in[[1]]))] <- c("d_NBA")
+  names(osc.w.in[[1]])[grep("cx", names(osc.w.in[[1]]))] <- c("psi")
+
   
-    omic.pa.st  <- as.numeric(treat.path[[1]]$PA)
-    omic.cai.st <- as.numeric(treat.path[[1]]$CAI)
-    # Single Omic  Protein Abundance Selection
-    if(omic.val == "PA")
-    {
-      pf.j <- scale(as.numeric(treat.path[[1]][[osc.treat.lab]]))
-    } else
-    {
+  osc.sel.meth.tab <- osc.meth.table.rel[which(osc.meth.table.rel$type == osc.types.sel ),]
+  osc.sel.meth.tab <- osc.sel.meth.tab[order(as.numeric(paste(osc.sel.meth.tab$compr)), 
+                                             rev(as.numeric(paste(osc.sel.meth.tab$osc.score))),
+                                             decreasing = FALSE), ]
+  
+  omic.pa.st  <- as.numeric(treat.path[[1]]$PA)
+  omic.cai.st <- as.numeric(treat.path[[1]]$CAI)
+  # Single Omic  Protein Abundance Selection
+  if(omic.val == "PA")
+  {
+    pf.j <- scale(as.numeric(treat.path[[1]][[osc.treat.lab]]))
+  } else
+  {
     # Multi Omic  Protein Abundance and CAI Selection
-      pf.j <- scale(as.numeric(treat.path[[1]][[osc.treat.lab]]))
-      pf.cai <- scale(omic.cai.st)
+    pf.j <- scale(as.numeric(treat.path[[1]][[osc.treat.lab]]))
+    pf.cai <- scale(omic.cai.st)
     
-      pf.j <- scale((pf.j+pf.cai)/2)
+    pf.j <- scale((pf.j+pf.cai)/2)
     
-    }
+  }
   
-    nc <- NC(pf.j)                               #Number of Classes (Discretisation Levels) treatment
-    n.q.lev          <- osc.sel.meth.tab$n.quant # standard conditions
-    names(n.q.lev)   <- osc.sel.meth.tab$m.quant
+  nc <- NC(pf.j)                               #Number of Classes (Discretisation Levels) treatment
+  n.q.lev          <- osc.sel.meth.tab$n.quant # standard conditions
+  names(n.q.lev)   <- osc.sel.meth.tab$m.quant
   
-    tab.bind <- data.frame()
-    
-    # Select the number of discretisation levels in common between the patterns
-    # in standard conditions and after a treatment.
-    for(j in 1:length(nc))
+  tab.bind <- data.frame()
+  
+  # Select the number of discretisation levels in common between the patterns
+  # in standard conditions and after a treatment.
+  for(j in 1:length(nc))
+  {
+    if(length(which(nc[[j]] == unique(as.numeric(n.q.lev)))) != 0)
     {
-       if(length(which(nc[[j]] == unique(as.numeric(n.q.lev)))) != 0)
-       {
-          tab.bind <- rbind(tab.bind, osc.sel.meth.tab[which(nc[[j]] == as.numeric(n.q.lev)),])
-       }
-     }
+      tab.bind <- rbind(tab.bind, osc.sel.meth.tab[which(nc[[j]] == as.numeric(n.q.lev)),])
+    }
+  }
   
   
   osc.sel.meth.tab <- tab.bind
@@ -287,7 +297,7 @@ osc.pst.train.pred <- function(treat.path,
     #  not compressed patterns, on the other hand the PSTs could be trained 
     #  also by compressed patterns. Obviously is a project choise and for this
     #  reason there are some parts of the source commented.
-
+    
     osc.pst.pred.out <- data.frame()
     #print("df$seq.std:")
     #print(df$seq.std)
@@ -604,8 +614,8 @@ SeqId<-function(nc,ccat)
 # Probabilistic suffic trees for the prediction. Paragraph 2.6
 # This function returns '1 - likelihood'
 PSTpred<-function(seq.std, seq.treat, h, seq.w=NULL, seq.w.c=NULL, A=1){
-
-    require(PST)
+  
+  require(PST)
   
   if(!is.null(seq.w.c))
   {
@@ -693,19 +703,20 @@ osc.get.diss.mat <- function(seq.osc.l)
   
   for(j in 1:length(seq.osc.l))
   {
-    if(!is.null(seq.osc.l[[j]]$pred.standard[1])){
-      if( seq.osc.l[[j]]$l.s[1] !=0){
-        osc.t <- osc.pst.split.likeh(seq.osc.l[[j]]$pred.standard[1])}}
+    if(!is.null(seq.osc.l[[j]][[1]]$pred.standard[1])){
+      if( seq.osc.l[[j]][[1]]$l.s[1] !=0){
+        
+        osc.t <- osc.pst.split.likeh(seq.osc.l[[j]][[1]]$pred.standard[1])}}
     
-    for(i in 2:length(seq.osc.l[[j]]$pred.standard))
+    for(i in 2:length(seq.osc.l[[j]][[1]]$pred.standard))
     {
-      if(!is.null(seq.osc.l[[j]]$pred.standard[i]) ){
-        if(seq.osc.l[[j]]$l.s[1]!=0){
-          osc.t <- osc.t + osc.pst.split.likeh(seq.osc.l[[j]]$pred.standard[i])}}
+      if(!is.null(seq.osc.l[[j]][[1]]$pred.standard[i]) ){
+        if(seq.osc.l[[j]][[1]]$l.s[1]!=0){
+          osc.t <- osc.t + osc.pst.split.likeh(seq.osc.l[[j]][[1]]$pred.standard[i])}}
     }
     
     if(length(osc.t)!=1){
-      osc.t <- osc.t /length(seq.osc.l[[j]]$pred.standard)
+      osc.t <- osc.t /length(seq.osc.l[[j]][[1]]$pred.standard)
       #print(df)
       df <- rbind(df, osc.t)
       names(df) <- c(1:length(osc.t))
@@ -721,7 +732,7 @@ osc.get.diss.mat <- function(seq.osc.l)
 osc.print.clusters<- function(seq.osc.likh, treatlabtarget, kegg.code)
 {
   for(j in 1:length(seq.osc.likh)){
-    if(seq.osc.likh[[j]][[1]][[1]][1,2] != 0) {
+    if(seq.osc.likh[[1]][[1]][[1]][[1]][[1,2]] != 0) {
       seq.osc.l.in  <- seq.osc.likh[[j]][[1]]
       seq.osc.l.out <- seq.osc.likh[[j]][[2]]
       type.training <- paste(kegg.code, seq.osc.likh[[j]][[3]], sep = "  ")
@@ -732,8 +743,10 @@ osc.print.clusters<- function(seq.osc.likh, treatlabtarget, kegg.code)
       
       diss.out <- daisy(df.out, metric = c("euclidean", "manhattan", "gower"),
                         stand = FALSE, type = list())
+      print(diss.out)
       diss.in  <- daisy(df.in, metric = c("euclidean", "manhattan", "gower"),
                         stand = FALSE, type = list())
+      print(diss.in)
       
       label    <- "outdeg"
       png(file=paste(type.training,label,".png", collapse=""), width=1480, height=1240, res=300)
